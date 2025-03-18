@@ -1,0 +1,1 @@
+Versione 1.0 di un tool per bonifiche massive che permette di eseguire in automatico script apex in serie
