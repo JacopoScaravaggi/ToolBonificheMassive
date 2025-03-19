@@ -1,19 +1,25 @@
-var jsforce = require("jsforce");
-var conn = new jsforce.Connection();
+//Enelx202306!u44Wu0D2pi2CHlTaGsojJSMvz
 const dotenv = require("dotenv");
 dotenv.config();
+var jsforce = require("jsforce");
+var conn = new jsforce.Connection({
+    oauth2 : {
+      clientId : process.env.CLIENT_ID,
+      clientSecret : process.env.CLIENT_SECRET,
+      redirectUri : process.env.LOGIN_URL
+    }});
 
 //LOGIN TO SALESFORCE
-
 function login(callback) {
-    conn.loginUrl = 'https://test.salesforce.com';
+    conn.loginUrl = process.env.LOGIN_URL;
+    console.log(conn.loginUrl)
     if(process.env.USERNAME && process.env.PASSWORD) {
-        conn.login(process.env.USERNAME + '@exuat.com', process.env.PASSWORD, function(err, res) {
+        conn.login('rvestamxc001' + process.env.EXTENSION, process.env.PASSWORD, function(err, res) {
             if (err) { return console.error(err); }
             else { 
                 console.log('\n');
-                console.log("\x1b[32m SUCCESSFULLY LOGGED INTO SALESFORCE.");
-                console.log("\x1b[32m Running User: " + process.env.USERNAME + '@exuat.com');
+                console.log("\x1b[32mSUCCESSFULLY LOGGED INTO SALESFORCE.");
+                console.log("\x1b[32mRunning User: " + process.env.USERNAME + process.env.EXTENSION);
                 console.log('\n');
                 if(callback){callback();}
             }
@@ -23,7 +29,6 @@ function login(callback) {
         console.log("Username and password not setup.")
     }
 }
-
 
 //find contacts using plain SOQL
 //More on SOQL here: https://trailhead.salesforce.com/en/content/learn/modules/apex_database
@@ -47,6 +52,7 @@ async function executeApexScript() {
 }
 
 async function generateAssetOnOrder() {
+    console.log('\x1b[36m%s\x1b[0m', '---> Executing generateAssetOnOrder <---');
     const apexBody = "List<String> orderIds = new List<String>{%PARAMS_TO_REPLACE%};for(String s: orderIds){NE.JS_RemoteMethods.order2asset(s);}";
     const params = ['a1xUA000000NoQjYAK'];
     
@@ -60,7 +66,7 @@ async function generateAssetOnOrder() {
         }
 
         let fixedParams = replaceLast(paramsToReplace, ',', '');
-        console.log('\x1b[0mCalling script on: \x1b[33m' + fixedParams + '\x1b[0m');
+        console.log('\x1b[0m\nCalling script on: \x1b[33m' + fixedParams + '\x1b[0m');
         let fixedScriptToRun = apexBody.replace('%PARAMS_TO_REPLACE%', fixedParams)
         
         const res = await conn.tooling.executeAnonymous(fixedScriptToRun);
@@ -81,15 +87,14 @@ if (process.argv[2]) {
     switch(process.argv[2]) {
         case 'displayContactsSOQL': 
             console.log('\x1b[36m%s\x1b[0m', '---> Calling displayContactsSOQL <---');
-            callback = displayContactsSOQL; 
+            //callback = displayContactsSOQL; 
             break;
         case 'executeApexScript':
             console.log('\x1b[36m%s\x1b[0m', '---> Calling executeApexScript <---');
-            callback = executeApexScript;
+            //callback = executeApexScript;
             break;
         case 'generateAssetOnOrder':
-            console.log('\x1b[36m%s\x1b[0m', '---> Calling generateAssetOnOrder <---');
-            callback = generateAssetOnOrder;
+            //callback = generateAssetOnOrder;
             break;
     }
 }
