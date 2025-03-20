@@ -54,7 +54,6 @@ async function generateAssetOnOrder() {
     const apexBody = "List<String> orderIds = new List<String>{%PARAMS_TO_REPLACE%};for(String s: orderIds){NE.JS_RemoteMethods.order2asset(s);}";
     const params = ['a2Ocl000007ppm8EAA'];
  
-    
     const BATCH_SIZE = 2;
     for(let i = 0; i < params.length ; i += BATCH_SIZE){
         let paramsToReplace = '';
