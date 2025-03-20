@@ -1,4 +1,3 @@
-//Enelx202306!u44Wu0D2pi2CHlTaGsojJSMvz
 const dotenv = require("dotenv");
 dotenv.config();
 var jsforce = require("jsforce");
@@ -53,7 +52,7 @@ async function executeApexScript() {
 async function generateAssetOnOrder() {
     console.log('\x1b[36m%s\x1b[0m', '---> Executing generateAssetOnOrder <---\x1b[0m');
     const apexBody = "List<String> orderIds = new List<String>{%PARAMS_TO_REPLACE%};for(String s: orderIds){NE.JS_RemoteMethods.order2asset(s);}";
-    const params = [];
+    const params = ['a2Ocl000007ppm8EAA'];
  
     
     const BATCH_SIZE = 2;
