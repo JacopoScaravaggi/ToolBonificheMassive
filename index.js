@@ -66,6 +66,7 @@ async function generateAssetOnOrder() {
         }
 
         let fixedParams = replaceLast(paramsToReplace, ',', '');
+        console.log(i);
         console.log('\x1b[0m\nCalling script on: \x1b[33m' + fixedParams + '\x1b[0m');
         let fixedScriptToRun = apexBody.replace('%PARAMS_TO_REPLACE%', fixedParams)
         
