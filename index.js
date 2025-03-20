@@ -12,14 +12,13 @@ var conn = new jsforce.Connection({
 //LOGIN TO SALESFORCE
 function login(callback) {
     conn.loginUrl = process.env.LOGIN_URL;
-    console.log(conn.loginUrl)
     if(process.env.USERNAME && process.env.PASSWORD) {
-        conn.login('rvestamxc001' + process.env.EXTENSION, process.env.PASSWORD, function(err, res) {
+        conn.login(process.env.USERNAME + process.env.EXTENSION, process.env.PASSWORD, function(err, res) {
             if (err) { return console.error(err); }
             else { 
                 console.log('\n');
                 console.log("\x1b[32mSUCCESSFULLY LOGGED INTO SALESFORCE.");
-                console.log("\x1b[32mRunning User: " + process.env.USERNAME + process.env.EXTENSION);
+                console.log("\x1b[32mRunning User: " + process.env.USERNAME + process.env.EXTENSION + '\x1b[0m');
                 console.log('\n');
                 if(callback){callback();}
             }
@@ -52,9 +51,10 @@ async function executeApexScript() {
 }
 
 async function generateAssetOnOrder() {
-    console.log('\x1b[36m%s\x1b[0m', '---> Executing generateAssetOnOrder <---');
+    console.log('\x1b[36m%s\x1b[0m', '---> Executing generateAssetOnOrder <---\x1b[0m');
     const apexBody = "List<String> orderIds = new List<String>{%PARAMS_TO_REPLACE%};for(String s: orderIds){NE.JS_RemoteMethods.order2asset(s);}";
-    const params = ['a1xUA000000NoQjYAK'];
+    const params = [];
+ 
     
     const BATCH_SIZE = 2;
     for(let i = 0; i < params.length ; i += BATCH_SIZE){
@@ -94,7 +94,7 @@ if (process.argv[2]) {
             //callback = executeApexScript;
             break;
         case 'generateAssetOnOrder':
-            //callback = generateAssetOnOrder;
+            callback = generateAssetOnOrder;
             break;
     }
 }
